@@ -5,13 +5,10 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: Put');
 header('Access-Control-Allow-headers: Content-Type, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Authorization');
 
-include_once 'config/db.php';
-include_once 'config/globals.php';
 include_once 'models/user.php';
 
 function updatePassword($data) {
-    $db = new Database();
-    $user = new User($db->get_connection());
+    $user = new User();
     $data['email'] = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
     $data['newPassword'] = md5($data['newPassword']);
     return $user->updatePassword($data['email'], $data['newPassword']);

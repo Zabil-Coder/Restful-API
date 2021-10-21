@@ -1,20 +1,22 @@
 <?php
 include_once 'config/globals.php';
+include_once 'config/db.php';
 
-class User {
+class User extends Database {
     private $table;
     private $conn;
 
-    public function __construct(\Mysqli $conn)
+    public function __construct()
     {
-        $this->conn = $conn;
+        $db = new Database();
+        $this->conn = $db->get_connection();
         $this->table = user_table;
     }
 
     public function validateLogin($email, $password)
     {
-        $result = $this->conn->query("SELECT u.name FROM {$this->table} u WHERE u.email={$email} AND u.password={$password}");
-        if($result->num_rows == 1) {
+        $result = $this->conn->query("SELECT u.name FROM {$this->table} u WHERE u.email='{$email}' AND u.password='{$password}'");
+        if($result->num_rows) {
             return true;
         }
         return false;
